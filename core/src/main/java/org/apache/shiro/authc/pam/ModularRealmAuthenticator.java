@@ -100,21 +100,21 @@ public class ModularRealmAuthenticator extends AbstractAuthenticator {
     ============================================*/
 
     /**
-     * Sets all realms used by this Authenticator, providing PAM (Pluggable Authentication Module) configuration.
-     *
-     * @param realms the realms to consult during authentication attempts.
-     */
-    public void setRealms(Collection<Realm> realms) {
-        this.realms = realms;
-    }
-
-    /**
      * Returns the realm(s) used by this {@code Authenticator} during an authentication attempt.
      *
      * @return the realm(s) used by this {@code Authenticator} during an authentication attempt.
      */
     protected Collection<Realm> getRealms() {
         return this.realms;
+    }
+
+    /**
+     * Sets all realms used by this Authenticator, providing PAM (Pluggable Authentication Module) configuration.
+     *
+     * @param realms the realms to consult during authentication attempts.
+     */
+    public void setRealms(Collection<Realm> realms) {
+        this.realms = realms;
     }
 
     /**
@@ -171,12 +171,14 @@ public class ModularRealmAuthenticator extends AbstractAuthenticator {
      * @return the AuthenticationInfo associated with the user account corresponding to the specified {@code token}
      */
     protected AuthenticationInfo doSingleRealmAuthentication(Realm realm, AuthenticationToken token) {
+        // 判断 realm 是否支持认证 当前token
         if (!realm.supports(token)) {
             String msg = "Realm [" + realm + "] does not support authentication token [" +
                     token + "].  Please ensure that the appropriate Realm implementation is " +
                     "configured correctly or that the realm accepts AuthenticationTokens of this type.";
             throw new UnsupportedTokenException(msg);
         }
+        // 获取认证信息
         AuthenticationInfo info = realm.getAuthenticationInfo(token);
         if (info == null) {
             String msg = "Realm [" + realm + "] was unable to find account data for the " +
@@ -193,12 +195,14 @@ public class ModularRealmAuthenticator extends AbstractAuthenticator {
      * @param realms the multiple realms configured on this Authenticator instance.
      * @param token  the submitted AuthenticationToken representing the subject's (user's) log-in principals and credentials.
      * @return an aggregated AuthenticationInfo instance representing account data across all the successfully
-     *         consulted realms.
+     * consulted realms.
      */
     protected AuthenticationInfo doMultiRealmAuthentication(Collection<Realm> realms, AuthenticationToken token) {
 
+        // 获取设置的认证策略类
         AuthenticationStrategy strategy = getAuthenticationStrategy();
 
+        // 生成空的认证信息
         AuthenticationInfo aggregate = strategy.beforeAllAttempts(realms, token);
 
         if (log.isTraceEnabled()) {
@@ -208,6 +212,7 @@ public class ModularRealmAuthenticator extends AbstractAuthenticator {
         for (Realm realm : realms) {
 
             try {
+                // 预身份验证
                 aggregate = strategy.beforeAttempt(realm, token, aggregate);
             } catch (ShortCircuitIterationException shortCircuitSignal) {
                 // Break from continuing with subsequnet realms on receiving 
@@ -215,6 +220,7 @@ public class ModularRealmAuthenticator extends AbstractAuthenticator {
                 break;
             }
 
+            // 是否支持验证类型
             if (realm.supports(token)) {
 
                 log.trace("Attempting to authenticate token [{}] using realm [{}]", token, realm);
@@ -231,6 +237,7 @@ public class ModularRealmAuthenticator extends AbstractAuthenticator {
                     }
                 }
 
+                // AbstractAuthenticationStrategy
                 aggregate = strategy.afterAttempt(realm, token, info, aggregate, t);
 
             } else {
@@ -238,6 +245,7 @@ public class ModularRealmAuthenticator extends AbstractAuthenticator {
             }
         }
 
+        // 认证最后执行
         aggregate = strategy.afterAllAttempts(token, aggregate);
 
         return aggregate;
@@ -270,8 +278,10 @@ public class ModularRealmAuthenticator extends AbstractAuthenticator {
         assertRealmsConfigured();
         Collection<Realm> realms = getRealms();
         if (realms.size() == 1) {
+            // 单个域
             return doSingleRealmAuthentication(realms.iterator().next(), authenticationToken);
         } else {
+            // 多个域 按顺序认证 默认使用 AtLeastOneSuccessfulStrategy
             return doMultiRealmAuthentication(realms, authenticationToken);
         }
     }

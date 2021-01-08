@@ -272,6 +272,7 @@ public class DefaultSecurityManager extends SessionsSecurityManager {
     public Subject login(Subject subject, AuthenticationToken token) throws AuthenticationException {
         AuthenticationInfo info;
         try {
+            // 身份认证  authenticate=[ɔːˈθentɪkeɪt]
             info = authenticate(token);
         } catch (AuthenticationException ae) {
             try {

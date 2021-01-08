@@ -28,5 +28,7 @@
  * How the <code>ModularRealmAuthenticator</code> actually coordinates this behavior is configurable based on your
  * application's needs using an injectible
  * {@link AuthenticationStrategy}.
+ * <p>
+ * 多 Realm 认证策略模块
  */
 package org.apache.shiro.authc.pam;

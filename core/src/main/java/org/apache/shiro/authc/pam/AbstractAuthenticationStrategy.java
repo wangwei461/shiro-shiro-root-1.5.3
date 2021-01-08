@@ -29,6 +29,7 @@ import java.util.Collection;
  * implementations.
  *
  * @since 0.9
+ * 抽象认证策略类
  */
 public abstract class AbstractAuthenticationStrategy implements AuthenticationStrategy {
 
@@ -37,6 +38,7 @@ public abstract class AbstractAuthenticationStrategy implements AuthenticationSt
      * aggregating account data across realms.
      */
     public AuthenticationInfo beforeAllAttempts(Collection<? extends Realm> realms, AuthenticationToken token) throws AuthenticationException {
+        // 返回空对象
         return new SimpleAuthenticationInfo();
     }
 
@@ -53,6 +55,7 @@ public abstract class AbstractAuthenticationStrategy implements AuthenticationSt
      */
     public AuthenticationInfo afterAttempt(Realm realm, AuthenticationToken token, AuthenticationInfo singleRealmInfo, AuthenticationInfo aggregateInfo, Throwable t) throws AuthenticationException {
         AuthenticationInfo info;
+        // 存储的授权信息
         if (singleRealmInfo == null) {
             info = aggregateInfo;
         } else {
@@ -78,12 +81,13 @@ public abstract class AbstractAuthenticationStrategy implements AuthenticationSt
      * {@link org.apache.shiro.authc.MergableAuthenticationInfo MergableAuthenticationInfo} is not desired for some reason.
      */
     protected AuthenticationInfo merge(AuthenticationInfo info, AuthenticationInfo aggregate) {
-        if( aggregate instanceof MergableAuthenticationInfo ) {
-            ((MergableAuthenticationInfo)aggregate).merge(info);
+        if (aggregate instanceof MergableAuthenticationInfo) {
+            // 执行合并操作
+            ((MergableAuthenticationInfo) aggregate).merge(info);
             return aggregate;
         } else {
-            throw new IllegalArgumentException( "Attempt to merge authentication info from multiple realms, but aggregate " +
-                      "AuthenticationInfo is not of type MergableAuthenticationInfo." );
+            throw new IllegalArgumentException("Attempt to merge authentication info from multiple realms, but aggregate " +
+                    "AuthenticationInfo is not of type MergableAuthenticationInfo.");
         }
     }
 

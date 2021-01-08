@@ -63,6 +63,7 @@ public abstract class AbstractCacheManager implements CacheManager, Destroyable 
 
         Cache cache;
 
+        // 获取缓存器 没有则创建新的缓存器
         cache = caches.get(name);
         if (cache == null) {
             cache = createCache(name);

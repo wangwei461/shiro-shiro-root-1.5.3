@@ -31,6 +31,8 @@ package org.apache.shiro.authc;
  * realm/data source.
  *
  * @since 0.9
+ * <p>
+ * 合并认证信息
  */
 public interface MergableAuthenticationInfo extends AuthenticationInfo {
 

@@ -37,6 +37,8 @@ import org.apache.shiro.realm.Realm;
  * associated subject (user).
  *
  * @since 0.2
+ *
+ * 所有 Realm 验证成功才算成功，且返回所有 Realm 身份验证成功的认证信息，如果有一个失败就失败了
  */
 public class AllSuccessfulStrategy extends AbstractAuthenticationStrategy {
 

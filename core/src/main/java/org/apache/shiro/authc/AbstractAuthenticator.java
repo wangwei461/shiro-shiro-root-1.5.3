@@ -195,6 +195,7 @@ public abstract class AbstractAuthenticator implements Authenticator, LogoutAwar
 
         AuthenticationInfo info;
         try {
+            // 认证核心方法
             info = doAuthenticate(token);
             if (info == null) {
                 String msg = "No account information found for authentication token [" + token + "] by this " +

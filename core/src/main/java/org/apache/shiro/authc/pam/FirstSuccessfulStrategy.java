@@ -34,6 +34,8 @@ import java.util.Collection;
  *
  * @see AtLeastOneSuccessfulStrategy AtLeastOneSuccessfulAuthenticationStrategy
  * @since 0.9
+ *
+ * 只要有一个 Realm 验证成功即可，只返回第一个 Realm 身份验证成功的认证信息，其他的忽略；
  */
 public class FirstSuccessfulStrategy extends AbstractAuthenticationStrategy {
 
@@ -58,8 +60,8 @@ public class FirstSuccessfulStrategy extends AbstractAuthenticationStrategy {
 
 
     /**
-     * Throws ShortCircuitIterationException if stopAfterFirstSuccess is set and authentication is 
-     * successful with a previously consulted realm. 
+     * Throws ShortCircuitIterationException if stopAfterFirstSuccess is set and authentication is
+     * successful with a previously consulted realm.
      * Returns the <code>aggregate</code> method argument, without modification
      * otherwise.
      */

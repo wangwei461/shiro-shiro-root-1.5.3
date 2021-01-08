@@ -44,11 +44,13 @@ import java.util.List;
  *
  * @since 0.9
  */
+// 授权管理器
 public abstract class AuthorizingSecurityManager extends AuthenticatingSecurityManager {
 
     /**
      * The wrapped instance to which all of this <tt>SecurityManager</tt> authorization calls are delegated.
      */
+    // 授权器
     private Authorizer authorizer;
 
     /**

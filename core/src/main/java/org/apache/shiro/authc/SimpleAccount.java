@@ -436,9 +436,11 @@ public class SimpleAccount implements Account, MergableAuthenticationInfo, Salte
      * @param info the <code>AuthenticationInfo</code> to merge into this account.
      */
     public void merge(AuthenticationInfo info) {
+        // 覆盖默认的认证信息并添加到身份认证集合内
         authcInfo.merge(info);
 
         // Merge SimpleAccount specific info
+        // 设为无效
         if (info instanceof SimpleAccount) {
             SimpleAccount otherAccount = (SimpleAccount) info;
             if (otherAccount.isLocked()) {

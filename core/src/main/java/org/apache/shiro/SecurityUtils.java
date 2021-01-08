@@ -53,7 +53,10 @@ public abstract class SecurityUtils {
     public static Subject getSubject() {
         Subject subject = ThreadContext.getSubject();
         if (subject == null) {
+            // 新建 Subject
             subject = (new Subject.Builder()).buildSubject();
+
+            // 绑定到线程
             ThreadContext.bind(subject);
         }
         return subject;
@@ -112,6 +115,7 @@ public abstract class SecurityUtils {
      *          calling code, which typically indicates an invalid application configuration.
      */
     public static SecurityManager getSecurityManager() throws UnavailableSecurityManagerException {
+        // 创建 安全管理器
         SecurityManager securityManager = ThreadContext.getSecurityManager();
         if (securityManager == null) {
             securityManager = SecurityUtils.securityManager;

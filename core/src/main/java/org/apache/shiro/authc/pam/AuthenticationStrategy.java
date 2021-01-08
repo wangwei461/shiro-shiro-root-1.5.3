@@ -38,6 +38,8 @@ import java.util.Collection;
  * @see AtLeastOneSuccessfulStrategy
  * @see FirstSuccessfulStrategy
  * @since 0.2
+ *
+ * 认证策略类
  */
 public interface AuthenticationStrategy {
 

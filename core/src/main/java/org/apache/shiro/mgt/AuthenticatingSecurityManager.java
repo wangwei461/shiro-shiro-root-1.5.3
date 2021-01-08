@@ -40,12 +40,14 @@ import org.apache.shiro.util.LifecycleUtils;
  *
  * @since 0.9
  */
+// 认证安全管理器
 public abstract class AuthenticatingSecurityManager extends RealmSecurityManager {
 
     /**
      * The internal <code>Authenticator</code> delegate instance that this SecurityManager instance will use
      * to perform all authentication operations.
      */
+    // 认证器
     private Authenticator authenticator;
 
     /**
@@ -65,7 +67,7 @@ public abstract class AuthenticatingSecurityManager extends RealmSecurityManager
      * {@link org.apache.shiro.authc.pam.ModularRealmAuthenticator ModularRealmAuthenticator}.
      *
      * @return the delegate <code>Authenticator</code> instance that this SecurityManager uses to perform all
-     *         authentication operations.
+     * authentication operations.
      */
     public Authenticator getAuthenticator() {
         return authenticator;
@@ -101,6 +103,8 @@ public abstract class AuthenticatingSecurityManager extends RealmSecurityManager
 
     /**
      * Delegates to the wrapped {@link org.apache.shiro.authc.Authenticator Authenticator} for authentication.
+     * <p>
+     * 认证
      */
     public AuthenticationInfo authenticate(AuthenticationToken token) throws AuthenticationException {
         return this.authenticator.authenticate(token);

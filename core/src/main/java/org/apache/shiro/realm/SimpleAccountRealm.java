@@ -157,13 +157,16 @@ public class SimpleAccountRealm extends AuthorizingRealm {
 
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
         UsernamePasswordToken upToken = (UsernamePasswordToken) token;
+        // 基本账户信息 包含认证、授权信息、锁住状态、过期状态
         SimpleAccount account = getUser(upToken.getUsername());
 
         if (account != null) {
-
+            // 账号是否被锁住
             if (account.isLocked()) {
                 throw new LockedAccountException("Account [" + account + "] is locked.");
             }
+
+            // 账号是否过期
             if (account.isCredentialsExpired()) {
                 String msg = "The credentials for account [" + account + "] are expired";
                 throw new ExpiredCredentialsException(msg);

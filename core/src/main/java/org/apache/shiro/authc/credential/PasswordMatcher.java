@@ -30,9 +30,12 @@ import org.apache.shiro.crypto.hash.Hash;
  * more specific {@code PasswordService} component.
  *
  * @since 1.2
+ * <p>
+ * 密码匹配器
  */
 public class PasswordMatcher implements CredentialsMatcher {
 
+    // 密码服务类
     private PasswordService passwordService;
 
     public PasswordMatcher() {
@@ -41,19 +44,28 @@ public class PasswordMatcher implements CredentialsMatcher {
 
     public boolean doCredentialsMatch(AuthenticationToken token, AuthenticationInfo info) {
 
+        // 确保密码服务类已配置
         PasswordService service = ensurePasswordService();
 
+        // 获取提交的凭证
         Object submittedPassword = getSubmittedPassword(token);
+
+        // 获取存储的凭证
         Object storedCredentials = getStoredPassword(info);
+
+        // 判断凭证类型
         assertStoredCredentialsType(storedCredentials);
 
         if (storedCredentials instanceof Hash) {
-            Hash hashedPassword = (Hash)storedCredentials;
+            Hash hashedPassword = (Hash) storedCredentials;
             HashingPasswordService hashingService = assertHashingPasswordService(service);
+
+            // 比较凭证
             return hashingService.passwordsMatch(submittedPassword, hashedPassword);
         }
         //otherwise they are a String (asserted in the 'assertStoredCredentialsType' method call above):
-        String formatted = (String)storedCredentials;
+        String formatted = (String) storedCredentials;
+        // 比较凭证
         return passwordService.passwordsMatch(submittedPassword, formatted);
     }
 
@@ -95,7 +107,7 @@ public class PasswordMatcher implements CredentialsMatcher {
         Object stored = storedAccountInfo != null ? storedAccountInfo.getCredentials() : null;
         //fix for https://issues.apache.org/jira/browse/SHIRO-363
         if (stored instanceof char[]) {
-            stored = new String((char[])stored);
+            stored = new String((char[]) stored);
         }
         return stored;
     }

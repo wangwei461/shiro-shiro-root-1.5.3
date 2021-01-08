@@ -18,5 +18,7 @@
  */
 /**
  * Caching support used to enhance performance for security operations.
+ * <p>
+ * 缓存抽象模块
  */
 package org.apache.shiro.cache;

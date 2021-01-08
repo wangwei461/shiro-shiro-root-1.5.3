@@ -38,6 +38,8 @@ import org.apache.shiro.subject.PrincipalCollection;
  *
  * @see FirstSuccessfulStrategy FirstSuccessfulAuthenticationStrategy
  * @since 0.2
+ *
+ * 只要有一个 Realm 验证成功即可
  */
 public class AtLeastOneSuccessfulStrategy extends AbstractAuthenticationStrategy {
 

@@ -88,6 +88,7 @@ public interface Subject {
      * @return this Subject's application-specific unique identity.
      * @see org.apache.shiro.subject.PrincipalCollection#getPrimaryPrincipal()
      */
+    // 身份
     Object getPrincipal();
 
     /**
@@ -103,6 +104,7 @@ public interface Subject {
      * @see #getPrincipal()
      * @see org.apache.shiro.subject.PrincipalCollection#getPrimaryPrincipal()
      */
+    // 身份集
     PrincipalCollection getPrincipals();
 
     /**
@@ -329,6 +331,7 @@ public interface Subject {
      *          if the authentication attempt fails.
      * @since 0.9
      */
+    // 登录
     void login(AuthenticationToken token) throws AuthenticationException;
 
     /**
@@ -343,6 +346,7 @@ public interface Subject {
      *         by providing valid credentials matching those known to the system, {@code false} otherwise.
      * @since 0.9
      */
+    // 已验证
     boolean isAuthenticated();
 
 
@@ -395,6 +399,7 @@ public interface Subject {
      *         remembered from a successful authentication during a previous session, {@code false} otherwise.
      * @since 1.0
      */
+    // 记住我
     boolean isRemembered();
 
     /**
@@ -405,6 +410,7 @@ public interface Subject {
      * @see #getSession(boolean)
      * @since 0.2
      */
+    // 会话
     Session getSession();
 
     /**
@@ -441,6 +447,7 @@ public interface Subject {
      * <p/>
      * Non-HTTP environments may of course use a logged-out subject for login again if desired.
      */
+    // 登出
     void logout();
 
     /**
@@ -526,6 +533,7 @@ public interface Subject {
      * @throws IllegalStateException if this {@code Subject} does not yet have an identity of its own.
      * @since 1.0
      */
+    // 身份伪装
     void runAs(PrincipalCollection principals) throws NullPointerException, IllegalStateException;
 
     /**
@@ -551,6 +559,7 @@ public interface Subject {
      * @see #runAs
      * @since 1.0
      */
+    // 前一个身份
     PrincipalCollection getPreviousPrincipals();
 
     /**
@@ -604,17 +613,20 @@ public interface Subject {
      *
      * @since 1.0
      */
+    // 建造器
     public static class Builder {
 
         /**
          * Hold all contextual data via the Builder instance's method invocations to be sent to the
          * {@code SecurityManager} during the {@link #buildSubject} call.
          */
+        // 身份上下文
         private final SubjectContext subjectContext;
 
         /**
          * The SecurityManager to invoke during the {@link #buildSubject} call.
          */
+        // 安全管理器
         private final SecurityManager securityManager;
 
         /**
