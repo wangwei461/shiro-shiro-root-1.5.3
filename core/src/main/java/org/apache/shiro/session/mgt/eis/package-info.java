@@ -19,5 +19,7 @@
 /**
  * EIS (Enterprise Information System)-tier components that can perform CRUD operations for sessions
  * using any EIS API.
+ * <p>
+ * CRUD API
  */
 package org.apache.shiro.session.mgt.eis;

@@ -22,6 +22,8 @@ package org.apache.shiro.util;
  * TODO - Class JavaDoc
  *
  * @since 1.0
+ *
+ * 抽象工厂 -- 封装
  */
 public abstract class AbstractFactory<T> implements Factory<T> {
 
@@ -42,6 +44,7 @@ public abstract class AbstractFactory<T> implements Factory<T> {
 
     public T getInstance() {
         T instance;
+        // 单例 ?
         if (isSingleton()) {
             if (this.singletonInstance == null) {
                 this.singletonInstance = createInstance();

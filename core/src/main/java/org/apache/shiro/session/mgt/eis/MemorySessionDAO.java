@@ -52,11 +52,14 @@ import java.util.concurrent.ConcurrentMap;
  *
  * @see CachingSessionDAO
  * @since 0.1
+ *
+ * 内存 Session
  */
 public class MemorySessionDAO extends AbstractSessionDAO {
 
     private static final Logger log = LoggerFactory.getLogger(MemorySessionDAO.class);
 
+    // Session 缓存器
     private ConcurrentMap<Serializable, Session> sessions;
 
     public MemorySessionDAO() {
@@ -64,6 +67,7 @@ public class MemorySessionDAO extends AbstractSessionDAO {
     }
 
     protected Serializable doCreate(Session session) {
+        // 生成ID
         Serializable sessionId = generateSessionId(session);
         assignSessionId(session, sessionId);
         storeSession(sessionId, session);
@@ -74,6 +78,7 @@ public class MemorySessionDAO extends AbstractSessionDAO {
         if (id == null) {
             throw new NullPointerException("id argument cannot be null.");
         }
+        // 存储 Session
         return sessions.putIfAbsent(id, session);
     }
 
@@ -82,6 +87,7 @@ public class MemorySessionDAO extends AbstractSessionDAO {
     }
 
     public void update(Session session) throws UnknownSessionException {
+        // 覆盖旧值
         storeSession(session.getId(), session);
     }
 
@@ -91,6 +97,7 @@ public class MemorySessionDAO extends AbstractSessionDAO {
         }
         Serializable id = session.getId();
         if (id != null) {
+            // 移除
             sessions.remove(id);
         }
     }
@@ -100,6 +107,7 @@ public class MemorySessionDAO extends AbstractSessionDAO {
         if (CollectionUtils.isEmpty(values)) {
             return Collections.emptySet();
         } else {
+            // 返回 Map 集合
             return Collections.unmodifiableCollection(values);
         }
     }

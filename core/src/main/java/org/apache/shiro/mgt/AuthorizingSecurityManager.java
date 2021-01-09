@@ -43,8 +43,11 @@ import java.util.List;
  * possible, suitable default instances for all dependencies will be created upon instantiation.
  *
  * @since 0.9
+ * <p>
+ * 授权管理器
+ * <p>
+ * 包含授权器 验证角色-权限常用方法
  */
-// 授权管理器
 public abstract class AuthorizingSecurityManager extends AuthenticatingSecurityManager {
 
     /**
@@ -170,8 +173,8 @@ public abstract class AuthorizingSecurityManager extends AuthenticatingSecurityM
     public void checkRoles(PrincipalCollection principals, Collection<String> roles) throws AuthorizationException {
         this.authorizer.checkRoles(principals, roles);
     }
-    
+
     public void checkRoles(PrincipalCollection principals, String... roles) throws AuthorizationException {
         this.authorizer.checkRoles(principals, roles);
-    }    
+    }
 }

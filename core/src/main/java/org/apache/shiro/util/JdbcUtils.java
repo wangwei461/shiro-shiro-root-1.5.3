@@ -18,13 +18,13 @@
  */
 package org.apache.shiro.util;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * A set of static helper methods for managing JDBC API objects.
@@ -34,10 +34,14 @@ import org.slf4j.LoggerFactory;
  * (Apache 2.0) have been maintained.
  *
  * @since 0.2
+ * <p>
+ * JDBC 资源关闭
  */
 public class JdbcUtils {
 
-    /** Private internal log instance. */
+    /**
+     * Private internal log instance.
+     */
     private static final Logger log = LoggerFactory.getLogger(JdbcUtils.class);
 
     /**

@@ -105,6 +105,8 @@ import java.util.concurrent.atomic.AtomicInteger;
  * the subclass implementation.
  *
  * @since 0.2
+ *
+ * 认证 Realm
  */
 public abstract class AuthenticatingRealm extends CachingRealm implements Initializable {
 

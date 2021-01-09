@@ -416,6 +416,7 @@ public class ModularRealmAuthorizer implements Authorizer, PermissionResolverAwa
      * an <code>UnauthorizedException</code> otherwise returns quietly.
      */
     public void checkRole(PrincipalCollection principals, String role) throws AuthorizationException {
+        // 验证是否配置 Realm
         assertRealmsConfigured();
         if (!hasRole(principals, role)) {
             throw new UnauthorizedException("Subject does not have role [" + role + "]");

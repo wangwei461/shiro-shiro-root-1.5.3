@@ -44,6 +44,8 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @see #onLogout(org.apache.shiro.subject.PrincipalCollection)
  * @see #getAvailablePrincipal(org.apache.shiro.subject.PrincipalCollection)
  * @since 0.9
+ *
+ * Realm 缓存实现类
  */
 public abstract class CachingRealm implements Realm, Nameable, CacheManagerAware, LogoutAware {
 
@@ -56,7 +58,10 @@ public abstract class CachingRealm implements Realm, Nameable, CacheManagerAware
     /*--------------------------------------------
     |    I N S T A N C E   V A R I A B L E S    |
     ============================================*/
+    // 实例名称 类名+序号
     private String name;
+
+    // 缓存状态
     private boolean cachingEnabled;
 
     // 缓存管理器
@@ -169,6 +174,7 @@ public abstract class CachingRealm implements Realm, Nameable, CacheManagerAware
      */
     protected void clearCache(PrincipalCollection principals) {
         if (!isEmpty(principals)) {
+            // 清理缓存
             doClearCache(principals);
             log.trace("Cleared cache entries for account with principals [{}]", principals);
         }

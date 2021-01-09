@@ -206,6 +206,7 @@ public class DelegatingSubject implements Subject {
 
     public void checkPermission(String permission) throws AuthorizationException {
         assertAuthzCheckPossible();
+        // 权限检查
         securityManager.checkPermission(getPrincipals(), permission);
     }
 
@@ -363,6 +364,7 @@ public class DelegatingSubject implements Subject {
 
     public void logout() {
         try {
+            // 清理 RunAs
             clearRunAsIdentitiesInternal();
             this.securityManager.logout(this);
         } finally {

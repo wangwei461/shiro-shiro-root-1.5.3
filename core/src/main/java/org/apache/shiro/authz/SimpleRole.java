@@ -31,7 +31,10 @@ import java.util.Set;
  */
 public class SimpleRole implements Serializable {
 
+    // 角色名称
     protected String name = null;
+
+    // 权限
     protected Set<Permission> permissions;
 
     public SimpleRole() {

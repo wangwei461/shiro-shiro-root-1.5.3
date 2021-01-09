@@ -92,6 +92,7 @@ public class ModularRealmAuthenticator extends AbstractAuthenticator {
      * {@link org.apache.shiro.authc.pam.AtLeastOneSuccessfulStrategy} by default.
      */
     public ModularRealmAuthenticator() {
+        // 默认认证策略
         this.authenticationStrategy = new AtLeastOneSuccessfulStrategy();
     }
 
@@ -275,6 +276,7 @@ public class ModularRealmAuthenticator extends AbstractAuthenticator {
      *                                 for the given principal and credentials.
      */
     protected AuthenticationInfo doAuthenticate(AuthenticationToken authenticationToken) throws AuthenticationException {
+        // 判断是否有 Realm
         assertRealmsConfigured();
         Collection<Realm> realms = getRealms();
         if (realms.size() == 1) {
@@ -298,6 +300,7 @@ public class ModularRealmAuthenticator extends AbstractAuthenticator {
      * @param principals the application-specific Subject/user identifier.
      */
     public void onLogout(PrincipalCollection principals) {
+        // 通知
         super.onLogout(principals);
         Collection<Realm> realms = getRealms();
         if (!CollectionUtils.isEmpty(realms)) {

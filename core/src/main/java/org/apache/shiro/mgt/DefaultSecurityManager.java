@@ -18,11 +18,7 @@
  */
 package org.apache.shiro.mgt;
 
-import org.apache.shiro.authc.AuthenticationException;
-import org.apache.shiro.authc.AuthenticationInfo;
-import org.apache.shiro.authc.AuthenticationToken;
-import org.apache.shiro.authc.Authenticator;
-import org.apache.shiro.authc.LogoutAware;
+import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.Authorizer;
 import org.apache.shiro.realm.Realm;
 import org.apache.shiro.session.InvalidSessionException;
@@ -109,6 +105,10 @@ public class DefaultSecurityManager extends SessionsSecurityManager {
         setRealms(realms);
     }
 
+    private static boolean isEmpty(PrincipalCollection pc) {
+        return pc == null || pc.isEmpty();
+    }
+
     /**
      * Returns the {@code SubjectFactory} responsible for creating {@link Subject} instances exposed to the application.
      *
@@ -133,7 +133,7 @@ public class DefaultSecurityManager extends SessionsSecurityManager {
      * implementation is a {@link DefaultSubjectDAO}.
      *
      * @return the {@code SubjectDAO} responsible for persisting Subject state, typically used after login or when an
-     *         Subject identity is discovered (eg after RememberMe services).
+     * Subject identity is discovered (eg after RememberMe services).
      * @see DefaultSubjectDAO
      * @since 1.2
      */
@@ -174,7 +174,7 @@ public class DefaultSecurityManager extends SessionsSecurityManager {
      * @param info     the {@code AuthenticationInfo} of a newly authenticated user.
      * @param existing the existing {@code Subject} instance that initiated the authentication attempt
      * @return the {@code Subject} instance that represents the context and session data for the newly
-     *         authenticated subject.
+     * authenticated subject.
      */
     protected Subject createSubject(AuthenticationToken token, AuthenticationInfo info, Subject existing) {
         SubjectContext context = createSubjectContext();
@@ -443,7 +443,7 @@ public class DefaultSecurityManager extends SessionsSecurityManager {
             return context;
         }
         try {
-            //Context couldn't resolve it directly, let's see if we can since we have direct access to 
+            //Context couldn't resolve it directly, let's see if we can since we have direct access to
             //the session manager:
             Session session = resolveContextSession(context);
             if (session != null) {
@@ -470,10 +470,6 @@ public class DefaultSecurityManager extends SessionsSecurityManager {
             return new DefaultSessionKey(sessionId);
         }
         return null;
-    }
-
-    private static boolean isEmpty(PrincipalCollection pc) {
-        return pc == null || pc.isEmpty();
     }
 
     /**
@@ -552,6 +548,7 @@ public class DefaultSecurityManager extends SessionsSecurityManager {
             throw new IllegalArgumentException("Subject method argument cannot be null.");
         }
 
+        // RememberMe 清理
         beforeLogout(subject);
 
         PrincipalCollection principals = subject.getPrincipals();
@@ -559,6 +556,8 @@ public class DefaultSecurityManager extends SessionsSecurityManager {
             if (log.isDebugEnabled()) {
                 log.debug("Logging out subject with primary principal {}", principals.getPrimaryPrincipal());
             }
+
+            // 认证器
             Authenticator authc = getAuthenticator();
             if (authc instanceof LogoutAware) {
                 ((LogoutAware) authc).onLogout(principals);
@@ -566,6 +565,7 @@ public class DefaultSecurityManager extends SessionsSecurityManager {
         }
 
         try {
+            // 删除 subject
             delete(subject);
         } catch (Exception e) {
             if (log.isDebugEnabled()) {
@@ -574,6 +574,7 @@ public class DefaultSecurityManager extends SessionsSecurityManager {
             }
         } finally {
             try {
+                // 停止 Session
                 stopSession(subject);
             } catch (Exception e) {
                 if (log.isDebugEnabled()) {

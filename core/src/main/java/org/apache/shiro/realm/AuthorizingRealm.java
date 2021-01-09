@@ -52,6 +52,8 @@ import java.util.concurrent.atomic.AtomicInteger;
  *
  * @see org.apache.shiro.authz.SimpleAuthorizationInfo
  * @since 0.2
+ *
+ * 授权 Realm
  */
 public abstract class AuthorizingRealm extends AuthenticatingRealm
         implements Authorizer, Initializable, PermissionResolverAware, RolePermissionResolverAware {
@@ -235,14 +237,17 @@ public abstract class AuthorizingRealm extends AuthenticatingRealm
                 log.debug("No authorizationCache instance set.  Checking for a cacheManager...");
             }
 
+            // Cache 管理器
             CacheManager cacheManager = getCacheManager();
 
             if (cacheManager != null) {
+                // 缓存名称
                 String cacheName = getAuthorizationCacheName();
                 if (log.isDebugEnabled()) {
                     log.debug("CacheManager [" + cacheManager + "] has been configured.  Building " +
                             "authorization cache named [" + cacheName + "]");
                 }
+                // 缓存
                 this.authorizationCache = cacheManager.getCache(cacheName);
             } else {
                 if (log.isDebugEnabled()) {
@@ -258,6 +263,7 @@ public abstract class AuthorizingRealm extends AuthenticatingRealm
     private Cache<Object, AuthorizationInfo> getAvailableAuthorizationCache() {
         Cache<Object, AuthorizationInfo> cache = getAuthorizationCache();
         if (cache == null && isAuthorizationCachingEnabled()) {
+            // 延迟创建
             cache = getAuthorizationCacheLazy();
         }
         return cache;
@@ -320,11 +326,13 @@ public abstract class AuthorizingRealm extends AuthenticatingRealm
             log.trace("Retrieving AuthorizationInfo for principals [" + principals + "]");
         }
 
+        // 缓存
         Cache<Object, AuthorizationInfo> cache = getAvailableAuthorizationCache();
         if (cache != null) {
             if (log.isTraceEnabled()) {
                 log.trace("Attempting to retrieve the AuthorizationInfo from cache.");
             }
+            // 缓存 key=身份
             Object key = getAuthorizationCacheKey(principals);
             info = cache.get(key);
             if (log.isTraceEnabled()) {
@@ -339,12 +347,15 @@ public abstract class AuthorizingRealm extends AuthenticatingRealm
 
         if (info == null) {
             // Call template method if the info was not found in a cache
+            // 获取授权信息 -- 抽象方法
             info = doGetAuthorizationInfo(principals);
             // If the info is not null and the cache has been created, then cache the authorization info.
             if (info != null && cache != null) {
                 if (log.isTraceEnabled()) {
                     log.trace("Caching authorization info for principals: [" + principals + "].");
                 }
+
+                // 加入缓存
                 Object key = getAuthorizationCacheKey(principals);
                 cache.put(key, info);
             }

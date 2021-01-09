@@ -54,6 +54,8 @@ import java.util.Collection;
  * @see org.apache.shiro.authc.AuthenticationInfo AuthenticationInfo
  * @see org.apache.shiro.authc.Account
  * @since 0.9
+ * <p>
+ * 授权信息 包含角色-权限内容
  */
 public interface AuthorizationInfo extends Serializable {
 

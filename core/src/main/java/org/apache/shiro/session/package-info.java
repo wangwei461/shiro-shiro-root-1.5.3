@@ -32,5 +32,7 @@
  * <p/>
  * Also because of this freedom, Shiro naturally supports Single Sign-On for any application as well, using
  * this heterogeneous session support.
+ * <p>
+ * Session 管理模块
  */
 package org.apache.shiro.session;

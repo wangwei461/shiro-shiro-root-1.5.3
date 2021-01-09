@@ -40,6 +40,7 @@ public class RandomSessionIdGenerator implements SessionIdGenerator {
 
     public RandomSessionIdGenerator() {
         try {
+            // 随机类
             this.random = java.security.SecureRandom.getInstance(RANDOM_NUM_GENERATOR_ALGORITHM_NAME);
         } catch (java.security.NoSuchAlgorithmException e) {
             log.debug("The SecureRandom SHA1PRNG algorithm is not available on the current platform.  Using the " +
@@ -64,6 +65,7 @@ public class RandomSessionIdGenerator implements SessionIdGenerator {
      */
     public Serializable generateId(Session session) {
         //ignore the argument - just call the Random:
+        // 生成随机 Long 数值
         return Long.toString(getRandom().nextLong());
     }
 }

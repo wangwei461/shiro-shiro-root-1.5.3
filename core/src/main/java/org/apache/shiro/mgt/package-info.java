@@ -19,5 +19,7 @@
 /**
  * Provides the master {@link org.apache.shiro.mgt.SecurityManager SecurityManager} interface and a default implementation
  * hierarchy for managing all aspects of Shiro's functionality in an application.
+ * <p>
+ * 核心接口 默认实现类
  */
 package org.apache.shiro.mgt;

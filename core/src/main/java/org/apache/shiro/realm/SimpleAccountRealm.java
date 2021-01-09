@@ -18,13 +18,7 @@
  */
 package org.apache.shiro.realm;
 
-import org.apache.shiro.authc.AuthenticationException;
-import org.apache.shiro.authc.AuthenticationInfo;
-import org.apache.shiro.authc.AuthenticationToken;
-import org.apache.shiro.authc.ExpiredCredentialsException;
-import org.apache.shiro.authc.LockedAccountException;
-import org.apache.shiro.authc.SimpleAccount;
-import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleRole;
 import org.apache.shiro.subject.PrincipalCollection;
@@ -51,8 +45,14 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 public class SimpleAccountRealm extends AuthorizingRealm {
 
     //TODO - complete JavaDoc
+
+    // 用户缓存 用户名--账户信息 LinkedHashMap
     protected final Map<String, SimpleAccount> users; //username-to-SimpleAccount
+
+    // 角色缓存 角色名--角色信息 LinkedHashMap
     protected final Map<String, SimpleRole> roles; //roleName-to-SimpleRole
+
+    // 读写锁
     protected final ReadWriteLock USERS_LOCK;
     protected final ReadWriteLock ROLES_LOCK;
 
@@ -69,6 +69,23 @@ public class SimpleAccountRealm extends AuthorizingRealm {
     public SimpleAccountRealm(String name) {
         this();
         setName(name);
+    }
+
+    protected static Set<String> toSet(String delimited, String delimiter) {
+        if (delimited == null || delimited.trim().equals("")) {
+            return null;
+        }
+
+        Set<String> values = new HashSet<String>();
+        String[] rolenamesArray = delimited.split(delimiter);
+        for (String s : rolenamesArray) {
+            String trimmed = s.trim();
+            if (trimmed.length() > 0) {
+                values.add(trimmed);
+            }
+        }
+
+        return values;
     }
 
     protected SimpleAccount getUser(String username) {
@@ -138,23 +155,13 @@ public class SimpleAccountRealm extends AuthorizingRealm {
         }
     }
 
-    protected static Set<String> toSet(String delimited, String delimiter) {
-        if (delimited == null || delimited.trim().equals("")) {
-            return null;
-        }
-
-        Set<String> values = new HashSet<String>();
-        String[] rolenamesArray = delimited.split(delimiter);
-        for (String s : rolenamesArray) {
-            String trimmed = s.trim();
-            if (trimmed.length() > 0) {
-                values.add(trimmed);
-            }
-        }
-
-        return values;
-    }
-
+    /**
+     * 认证
+     *
+     * @param token the authentication token containing the user's principal and credentials.
+     * @return
+     * @throws AuthenticationException
+     */
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
         UsernamePasswordToken upToken = (UsernamePasswordToken) token;
         // 基本账户信息 包含认证、授权信息、锁住状态、过期状态
@@ -177,7 +184,14 @@ public class SimpleAccountRealm extends AuthorizingRealm {
         return account;
     }
 
+    /**
+     * 授权
+     *
+     * @param principals the primary identifying principals of the AuthorizationInfo that should be retrieved.
+     * @return
+     */
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
+        // 用户名
         String username = getUsername(principals);
         USERS_LOCK.readLock().lock();
         try {

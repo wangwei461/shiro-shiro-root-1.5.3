@@ -51,6 +51,7 @@ public abstract class SecurityUtils {
      *                               - a Subject should <em>always</em> be available to the caller.
      */
     public static Subject getSubject() {
+        // 获取线程内的 Subject
         Subject subject = ThreadContext.getSubject();
         if (subject == null) {
             // 新建 Subject

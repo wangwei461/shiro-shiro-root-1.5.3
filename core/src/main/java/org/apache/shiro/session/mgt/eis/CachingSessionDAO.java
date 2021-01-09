@@ -166,9 +166,12 @@ public abstract class CachingSessionDAO extends AbstractSessionDAO implements Ca
      */
     protected Cache<Serializable, Session> createActiveSessionsCache() {
         Cache<Serializable, Session> cache = null;
+        // 缓存管理器
         CacheManager mgr = getCacheManager();
         if (mgr != null) {
+            // Session 缓存名称
             String name = getActiveSessionsCacheName();
+            // 创建 Cache
             cache = mgr.getCache(name);
         }
         return cache;
@@ -199,6 +202,7 @@ public abstract class CachingSessionDAO extends AbstractSessionDAO implements Ca
         if (sessionId != null) {
             Cache<Serializable, Session> cache = getActiveSessionsCacheLazy();
             if (cache != null) {
+                // 缓存获取 Session 根据 SessionId
                 cached = getCachedSession(sessionId, cache);
             }
         }

@@ -107,6 +107,7 @@ public abstract class AuthenticatingSecurityManager extends RealmSecurityManager
      * 认证
      */
     public AuthenticationInfo authenticate(AuthenticationToken token) throws AuthenticationException {
+        // 认证 token
         return this.authenticator.authenticate(token);
     }
 

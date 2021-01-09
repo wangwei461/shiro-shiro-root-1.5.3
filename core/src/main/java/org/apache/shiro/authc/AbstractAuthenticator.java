@@ -55,6 +55,8 @@ public abstract class AbstractAuthenticator implements Authenticator, LogoutAwar
     ============================================*/
     /**
      * Any registered listeners that wish to know about things during the authentication process.
+     * <p>
+     * 监听器列表
      */
     private Collection<AuthenticationListener> listeners;
 
@@ -75,6 +77,18 @@ public abstract class AbstractAuthenticator implements Authenticator, LogoutAwar
     ============================================*/
 
     /**
+     * Returns the {@link AuthenticationListener AuthenticationListener}s that should be notified during authentication
+     * attempts.
+     *
+     * @return the {@link AuthenticationListener AuthenticationListener}s that should be notified during authentication
+     * attempts.
+     */
+    @SuppressWarnings({"UnusedDeclaration"})
+    public Collection<AuthenticationListener> getAuthenticationListeners() {
+        return this.listeners;
+    }
+
+    /**
      * Sets the {@link AuthenticationListener AuthenticationListener}s that should be notified during authentication
      * attempts.
      *
@@ -88,18 +102,6 @@ public abstract class AbstractAuthenticator implements Authenticator, LogoutAwar
         } else {
             this.listeners = listeners;
         }
-    }
-
-    /**
-     * Returns the {@link AuthenticationListener AuthenticationListener}s that should be notified during authentication
-     * attempts.
-     *
-     * @return the {@link AuthenticationListener AuthenticationListener}s that should be notified during authentication
-     *         attempts.
-     */
-    @SuppressWarnings({"UnusedDeclaration"})
-    public Collection<AuthenticationListener> getAuthenticationListeners() {
-        return this.listeners;
     }
 
     /*-------------------------------------------
@@ -117,6 +119,7 @@ public abstract class AbstractAuthenticator implements Authenticator, LogoutAwar
      * @param info  the returned {@code AuthenticationInfo} resulting from the successful authentication.
      */
     protected void notifySuccess(AuthenticationToken token, AuthenticationInfo info) {
+        // 成功 通知
         for (AuthenticationListener listener : this.listeners) {
             listener.onSuccess(token, info);
         }
@@ -134,6 +137,7 @@ public abstract class AbstractAuthenticator implements Authenticator, LogoutAwar
      * @param ae    the resulting {@code AuthenticationException} that caused the authentication to fail.
      */
     protected void notifyFailure(AuthenticationToken token, AuthenticationException ae) {
+        // 失败 通知
         for (AuthenticationListener listener : this.listeners) {
             listener.onFailure(token, ae);
         }
@@ -149,6 +153,7 @@ public abstract class AbstractAuthenticator implements Authenticator, LogoutAwar
      * @param principals the identifying principals of the {@code Subject}/account logging out.
      */
     protected void notifyLogout(PrincipalCollection principals) {
+        // 登出 通知
         for (AuthenticationListener listener : this.listeners) {
             listener.onLogout(principals);
         }
@@ -162,6 +167,7 @@ public abstract class AbstractAuthenticator implements Authenticator, LogoutAwar
      * @param principals the identifying principals of the {@code Subject}/account logging out.
      */
     public void onLogout(PrincipalCollection principals) {
+        // 通知
         notifyLogout(principals);
     }
 
@@ -217,6 +223,7 @@ public abstract class AbstractAuthenticator implements Authenticator, LogoutAwar
                     log.warn(msg, t);
             }
             try {
+                // 登录失败--监听器
                 notifyFailure(token, ae);
             } catch (Throwable t2) {
                 if (log.isWarnEnabled()) {
@@ -252,7 +259,7 @@ public abstract class AbstractAuthenticator implements Authenticator, LogoutAwar
      *
      * @param token the authentication token encapsulating the user's login information.
      * @return an {@code AuthenticationInfo} object encapsulating the user's account information
-     *         important to Shiro.
+     * important to Shiro.
      * @throws AuthenticationException if there is a problem logging in the user.
      */
     protected abstract AuthenticationInfo doAuthenticate(AuthenticationToken token)

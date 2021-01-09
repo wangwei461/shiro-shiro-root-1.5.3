@@ -38,8 +38,23 @@ import java.util.Map;
  * @see org.apache.shiro.session.mgt.SessionManager#start SessionManager.start(SessionContext)
  * @see org.apache.shiro.session.mgt.SessionFactory SessionFactory
  * @since 1.0
+ * <p>
+ * Session 上下文
  */
 public interface SessionContext extends Map<String, Object> {
+
+    /**
+     * Returns the originating host name or IP address (as a String) from where the {@code Subject} is initiating the
+     * {@code Session}.
+     * <p/>
+     * See the {@link #setHost(String) setHost(String)} JavaDoc for more about security policies based on the
+     * {@code Session} host.
+     *
+     * @return the originating host name or IP address (as a String) from where the {@code Subject} is initiating the
+     * {@code Session}.
+     * @see #setHost(String) setHost(String)
+     */
+    String getHost();
 
     /**
      * Sets the originating host name or IP address (as a String) from where the {@code Subject} is initiating the
@@ -70,19 +85,6 @@ public interface SessionContext extends Map<String, Object> {
      * @since 1.0
      */
     void setHost(String host);
-
-    /**
-     * Returns the originating host name or IP address (as a String) from where the {@code Subject} is initiating the
-     * {@code Session}.
-     * <p/>
-     * See the {@link #setHost(String) setHost(String)} JavaDoc for more about security policies based on the
-     * {@code Session} host.
-     *
-     * @return the originating host name or IP address (as a String) from where the {@code Subject} is initiating the
-     *         {@code Session}.
-     * @see #setHost(String) setHost(String)
-     */
-    String getHost();
 
     Serializable getSessionId();
 

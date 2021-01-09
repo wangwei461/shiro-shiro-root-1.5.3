@@ -20,5 +20,7 @@
  * Support for validating <em>credentials</em> (such as passwords or X509 certificates) during
  * authentication via the {@link org.apache.shiro.authc.credential.CredentialsMatcher CredentialsMatcher}
  * interface and its supporting implementations.
+ * <p>
+ * 凭证 模块
  */
 package org.apache.shiro.authc.credential;

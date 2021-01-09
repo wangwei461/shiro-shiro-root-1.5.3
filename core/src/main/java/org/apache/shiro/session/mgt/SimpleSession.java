@@ -90,9 +90,12 @@ public class SimpleSession implements ValidatingSession, Serializable {
     private transient long timeout;
     private transient boolean expired;
     private transient String host;
+
+    // 属性
     private transient Map<Object, Object> attributes;
 
     public SimpleSession() {
+        // 默认 30分钟
         this.timeout = DefaultSessionManager.DEFAULT_GLOBAL_SESSION_TIMEOUT; //TODO - remove concrete reference to DefaultSessionManager
         this.startTimestamp = new Date();
         this.lastAccessTime = this.startTimestamp;
@@ -296,6 +299,7 @@ public class SimpleSession implements ValidatingSession, Serializable {
     private Map<Object, Object> getAttributesLazy() {
         Map<Object, Object> attributes = getAttributes();
         if (attributes == null) {
+            // 初始化 空属性
             attributes = new HashMap<Object, Object>();
             setAttributes(attributes);
         }
